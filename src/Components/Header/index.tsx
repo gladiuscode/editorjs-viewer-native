@@ -3,9 +3,14 @@ import { useMemo } from 'react';
 
 import { styles } from './styles';
 import { IHeaderProps } from './types';
+import {useParseHtmlTags} from '../../hooks/useParseHtmlTags';
 
 const Header = ({ data, fontFamily, style, ...rest }: IHeaderProps) => {
   const headingStyleByLevel = useMemo(() => styles[`h${data.level}`], []);
+
+  const { parseHtmlTag, defaultListTags } = useParseHtmlTags();
+
+  const parsedText = useMemo(() => parseHtmlTag(defaultListTags, data.text), []);
 
   return (
     <Text
@@ -20,7 +25,7 @@ const Header = ({ data, fontFamily, style, ...rest }: IHeaderProps) => {
       ]}
       {...rest}
     >
-      {data.text}
+      {parsedText}
     </Text>
   );
 };
